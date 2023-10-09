@@ -1,0 +1,4 @@
+﻿  재귀호출.c
+C:\Users\심재성\Desktop\C-자료구조\datastruct-sample\datastruct-sample\재귀호출.c(5,13): warning C4033: 'test'은(는) 값을 반환해야 합니다.
+C:\Users\심재성\Desktop\C-자료구조\datastruct-sample\datastruct-sample\재귀호출.c(10): warning C4716: 'test': 값을 반환해야 합니다.
+  datastruct-sample.vcxproj -> C:\Users\심재성\Desktop\C-자료구조\datastruct-sample\x64\Debug\datastruct-sample.exe
