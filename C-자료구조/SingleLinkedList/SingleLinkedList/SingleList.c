@@ -31,6 +31,13 @@ void PrintList(void)
 	putchar('\n');
 }
 
+int IsEmpthy(void)
+{
+	if (Head == NULL)
+		return 1;
+	else
+		return 0;
+}
 
 int InsertNewNode_Head(char* pszData)
 {
@@ -135,25 +142,51 @@ void ReleaseList(void)
 //	return 0;
 //}
 
-int DeleteNode(char* pszData) 
+//int DeleteNode(char* pszData) 
+//{
+//	NODE* prev = FindData(pszData);
+//
+//	if (prev || prev == NULL) {
+//		if (prev == NULL)
+//		{
+//			NODE* BF_Head = Head;
+//			Head = Head->next;
+//			free(BF_Head);
+//		}
+//		else {
+//			NODE* Del_Node = prev->next;
+//			prev->next = prev->next->next;
+//			free(Del_Node);
+//		}		
+//		return 1; //삭제 성공
+//	}	
+//	return 0; //삭제 실패(존재X)
+//}
+
+int DeleteNode(char* pszData)
 {
 	NODE* prev = FindData(pszData);
 
-	if (prev || prev == NULL) {
-		if (prev == NULL)
-		{
-			NODE* BF_Head = Head;
-			Head = Head->next;
-			free(BF_Head);
-		}
-		else {
-			NODE* Del_Node = prev->next;
-			prev->next = prev->next->next;
-			free(Del_Node);
-		}		
-		return 1;
-	}	
-	return 0;
+	if (IsEmpthy()) {
+		printf("빈 리스트입니다.\n");
+		return 0;
+	}
+
+	if (prev) {
+		NODE* Del_Node = prev->next;
+		prev->next = Del_Node->next;
+		free(Del_Node);
+	}
+	else {
+		NODE* Del_Node = Head;
+		Head = Del_Node->next;
+		//Del_Node = NULL;
+		free(Del_Node);
+	}
+	//prev값이 NULL이면, 삭제되는 노드가 헤드이거나 빈리스트인 2가지 경우이다.
+	//빈리스트에서 Head 연산을 어떻게 해줘도 결과는 빈리스트이다
+	return 1; //삭제를 하던 말던 1 반환
+
 }
 
 
@@ -167,15 +200,37 @@ int main(void)
 	InsertNewNode_Head("TEST3");
 	PrintList();
 
-	puts("1 찾기");
-	printf("FindNode : %p\n", FindData("TEST1"));
+	puts("헤드 삭제");
+	DeleteNode("TEST3");
+	PrintList();//반드시 테스트 잘하기!!!!
+	
+	puts("위치 찾기");
+	printf("FindNode before TEST1 : %p\n", FindData("TEST1"));
+
+	puts("2 삭제");
+	DeleteNode("TEST2");
+	PrintList();
+
+	puts("2 삽입");
+	InsertNewNode_Head("TEST2");
+	PrintList();
 
 	puts("3 삭제");
 	DeleteNode("TEST3");
 	PrintList();
 
+
 	puts("3 삽입");
 	InsertNewNode_Head("TEST3");
+	PrintList();
+
+	puts("1 삭제");
+	DeleteNode("TEST1");
+	PrintList();
+
+
+	puts("1 삽입");
+	InsertNewNode_Head("TEST1");
 	PrintList();
 
 	puts("4 꼬리 삽입");

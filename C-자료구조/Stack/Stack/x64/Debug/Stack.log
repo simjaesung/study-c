@@ -1,0 +1,4 @@
+﻿  Stack.c
+C:\Users\심재성\Desktop\C-study\C-자료구조\Stack\Stack\Stack.c(67): warning C4716: 'InsertNewNode_Tail': 값을 반환해야 합니다.
+C:\Users\심재성\Desktop\C-study\C-자료구조\Stack\Stack\Stack.c(163): warning C4716: 'Push': 값을 반환해야 합니다.
+  Stack.vcxproj -> C:\Users\심재성\Desktop\C-study\C-자료구조\Stack\x64\Debug\Stack.exe
