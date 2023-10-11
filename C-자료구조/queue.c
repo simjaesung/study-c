@@ -139,7 +139,7 @@ int DeleteNode(char* pszData)
 		printf("빈 리스트입니다.\n");
 		return 0;
 	}
-		
+
 	if (prev) {
 		NODE* Del_Node = prev->next;
 		prev->next = Del_Node->next;
@@ -149,51 +149,60 @@ int DeleteNode(char* pszData)
 		NODE* Del_Node = Head;
 		Head = Del_Node->next;
 		free(Del_Node);
-	} 
+	}
 	//prev값이 NULL이면, 삭제되는 노드가 헤드이거나 빈리스트인 2가지 경우이다.
 	//빈리스트에서 Head 연산을 어떻게 해줘도 결과는 빈리스트이다
 	return 1; //삭제를 하던 말던 1 반환
-	
+
 }
 
-int Push(char* pszData)
+void enqueue(char *pszData)
 {
 	InsertNewNode_Head(pszData);
 }
 
-
-NODE* Pop(void)
+NODE * dequeue()
 {
 	if (IsEmpty()) {
-		printf("비어있는 리스트입니다.");
+		printf("빈 리스트입니다.\n");
 		return 0;
 	}
+
+	NODE* pTmp = Head;
+	NODE* pPrev = NULL;
+
+	while (pTmp->next != NULL)
+	{
+		pPrev = pTmp;
+		pTmp = pTmp->next;
+	}
+
+	NODE* Dequ_node = (NODE*)malloc(sizeof(NODE));
+	memcpy(Dequ_node, pTmp, sizeof(pTmp));
 	
-	NODE* pop_Node = Head;	//null로 선언하면 안된다.
-	return pop_Node;
-	DeleteNode(Head);
-	//return pop_Node;
+	DeleteNode(pTmp);
+	return Dequ_node;
 }
 
 int main(void)
 {
-	DeleteNode("TEST3");
-	Push("TEST1");
+	puts("enqueue!");
+	enqueue("TEST1");
 	PrintList();
-	Push("TEST2");
-	PrintList();
-	Push("TEST3");
-	PrintList();
-	printf("POP진행 -> 나온값 : %s\n", Pop()->szData);
-	printf("POP진행 -> 나온값 : %p\n", Pop());
-	printf("POP진행 -> 나온값 : %p\n", Pop());
-	Pop();
-	//Pop();
 
+	puts("enqueue!");
+	enqueue("TEST2");
 	PrintList();
-	Push("TEST4");
-	PrintList();
-	Pop();
-	PrintList();
+
+	puts("dequeue!");
+	printf("dequeue된 노드값 : %s\n",dequeue()->szData);
+
+	puts("dequeue!");
+	printf("dequeue된 노드값 : %s\n", dequeue()->szData);
+	
+	dequeue();
+
+	ReleaseList();
+
 	return 0;
 }
