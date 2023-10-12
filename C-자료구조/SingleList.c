@@ -10,6 +10,7 @@ typedef struct NODE
 } NODE;
 
 NODE* Head = NULL;
+NODE* pTail = NULL;
 
 //연결 리스트 전체데이터 출력
 void PrintList(void)
@@ -24,10 +25,12 @@ void PrintList(void)
 	NODE* pNode = Head;
 	while (pNode != NULL)
 	{
-		printf("now: [%p] /%s, next[%p]\n", pNode, pNode->szData, pNode->next);
+		printf("%s의 주소 : [%p] /, next의 주소: [%p]\n", pNode->szData, pNode, pNode->next);
 		pNode = pNode->next;
 	}
-
+	putchar('\n');
+	printf("헤드 노드: %s\n", Head->szData);
+	printf("꼬리 노드: %s\n", pTail->szData);
 	putchar('\n');
 }
 
@@ -43,18 +46,19 @@ int InsertNewNode_Head(char* pszData)
 {
 	NODE* newNode = (NODE*)malloc(sizeof(NODE));
 	memset(newNode, 0, sizeof(NODE));
-
 	strcpy_s(newNode->szData,sizeof(newNode->szData), pszData);
 
 
 	if (Head == NULL)
+	{
 		Head = newNode;
+		pTail = Head;
+	}
+		
 	else
 	{
 		newNode->next = Head;
 		Head = newNode;
-		/*newNode->next = Head;
-		Head = newNode;*/
 	}
 
 	return 1;
@@ -62,18 +66,25 @@ int InsertNewNode_Head(char* pszData)
 
 int InsertNewNode_Tail(char* pszData)
 {
-	NODE* pTmp = Head;
+	//NODE* pTmp = Head;
 
-	while (pTmp -> next != NULL)
+	/*while (pTmp -> next != NULL)
 	{
 		pTmp = pTmp->next;
-	}
+	}*/
 
 	NODE* NewNode = (NODE*)malloc(sizeof(NODE));
+	memset(NewNode, 0, sizeof(NODE));
 	strcpy_s(NewNode->szData, sizeof(pszData),pszData);
 
-	pTmp->next = NewNode;
-	NewNode->next = NULL;
+	if (Head == NULL)
+		Head = NewNode;
+	else
+		pTail->next = NewNode;
+
+	pTail = NewNode;
+	
+	//NewNode->next = NULL;
 }
 
 //find하는 경우는 삭제할떄가 가장 주된 이유이다. 따라서 앞전 주소를 반환해주는게 가장 효율적이다.
@@ -109,59 +120,9 @@ void ReleaseList(void)
 		free(pPrev);
 	}
 	Head = NULL; //추후 사용될 가능성이 있기 때문에, 아예 정보를 삭제하는 것은 무리가 있음
+	pTail = 0;
 }
 
-//우선 작성한 노드 삭제 함수
-
-//int DeleteNode(char* pszData)
-//{
-//	NODE* pTmp = Head;
-//	NODE* pPrev = NULL;
-//
-//	while (pTmp != NULL)
-//	{
-//		if ((strcmp(pTmp->szData, pszData)) == 0)
-//		{
-//			if (pTmp == Head) {
-//				//헤드 변경
-//				Head = pTmp->next;
-//			}
-//			else {
-//				//삭제
-//				pPrev->next = pTmp->next;
-//				//pNode->next = NULL;
-//			}
-//			free(pTmp);
-//			printf("해당 Node를 삭제하였습니다.\n");
-//			return 1;
-//		}
-//		pPrev = pTmp;
-//		pTmp = pTmp->next;
-//	}
-//	printf("해당 Node는 존재하지 않습니다.\n");
-//	return 0;
-//}
-
-//int DeleteNode(char* pszData) 
-//{
-//	NODE* prev = FindData(pszData);
-//
-//	if (prev || prev == NULL) {
-//		if (prev == NULL)
-//		{
-//			NODE* BF_Head = Head;
-//			Head = Head->next;
-//			free(BF_Head);
-//		}
-//		else {
-//			NODE* Del_Node = prev->next;
-//			prev->next = prev->next->next;
-//			free(Del_Node);
-//		}		
-//		return 1; //삭제 성공
-//	}	
-//	return 0; //삭제 실패(존재X)
-//}
 
 int DeleteNode(char* pszData)
 {
@@ -175,6 +136,9 @@ int DeleteNode(char* pszData)
 	if (prev) {
 		NODE* Del_Node = prev->next;
 		prev->next = Del_Node->next;
+		if (Del_Node == pTail)
+			pTail = prev;
+
 		free(Del_Node);
 	}
 	else {
@@ -195,53 +159,21 @@ int main(void)
 	//List 테스트를 위한 코드
 	//기능 정의할 때 테스트 코드를 만들어두는 것은 필수!
 	puts("1~3 insert");
-	InsertNewNode_Head("TEST1");
-	InsertNewNode_Head("TEST2");
-	InsertNewNode_Head("TEST3");
+	InsertNewNode_Tail("TEST1");
 	PrintList();
-
-	puts("헤드 삭제");
-	DeleteNode("TEST3");
-	PrintList();//반드시 테스트 잘하기!!!!
+	InsertNewNode_Tail("TEST2");
+	PrintList();
+	InsertNewNode_Tail("TEST3");
+	PrintList();
+	InsertNewNode_Head("TEST4");
+	PrintList();
 	
-	puts("위치 찾기");
-	printf("FindNode before TEST1 : %p\n", FindData("TEST1"));
-
-	puts("2 삭제");
+	DeleteNode("TEST3");
+	PrintList();
 	DeleteNode("TEST2");
 	PrintList();
-
-	puts("2 삽입");
-	InsertNewNode_Head("TEST2");
-	PrintList();
-
-	puts("3 삭제");
-	DeleteNode("TEST3");
-	PrintList();
-
-
-	puts("3 삽입");
-	InsertNewNode_Head("TEST3");
-	PrintList();
-
-	puts("1 삭제");
 	DeleteNode("TEST1");
 	PrintList();
-
-
-	puts("1 삽입");
-	InsertNewNode_Head("TEST1");
-	PrintList();
-
-	puts("4 꼬리 삽입");
-	InsertNewNode_Tail("TEST4");
-	PrintList();
-	DeleteNode("TEST2");
-	PrintList();
-	DeleteNode("TEST4");
-	PrintList();
-
-
 	printf("전체삭제\n");
 	ReleaseList();
 	PrintList();
