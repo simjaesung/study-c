@@ -4,34 +4,33 @@
 
 int main()
 {
-	int aLength = 0, cLength = 0;
+	int BufferSize, StrSize;
 
-	printf("문자열 배열 길이 입력: ");
-	scanf_s("%d", &aLength);
+	printf("저장할 char* 개수:");
+	scanf_s("%d", &BufferSize);
 
-	printf("최대 문자열 길이 입력: ");
-	scanf_s("%d", &cLength);
+	printf("최대 문자열 길이:");
+	scanf_s("%d", &StrSize);
+	char** strBuffer = (char**)malloc(sizeof(char*) * BufferSize);
+	memset(strBuffer, 0, _msize(strBuffer));
 
-	char** sListBuffer = (char**)malloc(sizeof(char*) * aLength);
-	char* pszBuffer = (char*)malloc(sizeof(char) * cLength * aLength);
-
-	memset(sListBuffer, 0,sizeof(sListBuffer));
-	memset(pszBuffer, 0, sizeof(pszBuffer));
-
-	for (int i = 0; i < aLength; i++)
+	for (int i = 0; i < BufferSize; i++)
 	{
-		scanf_s("%s", pszBuffer + cLength * i, cLength);
-		sListBuffer[i] = pszBuffer + cLength * i;
+		char* charBuffer = (char*)malloc(sizeof(char) * StrSize);
+		memset(charBuffer, 0, _msize(charBuffer));
+		//gets_s(charBuffer, _msize(charBuffer));
+		scanf_s("%s", charBuffer);
+
+		strBuffer[i] = charBuffer;
 	}
 
-	for (int i = 0; i < aLength; i++)
+	for (int i = 0; i < BufferSize; i++)
 	{
-		puts(sListBuffer[i]);
+		puts(strBuffer[i]);
+		free(strBuffer[i]);
 	}
 
-	free(sListBuffer);
-	free(pszBuffer);
-	
-	
+	free(strBuffer);
+
 	return 0;
 }
